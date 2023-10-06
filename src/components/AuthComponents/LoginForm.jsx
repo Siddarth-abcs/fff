@@ -1,0 +1,57 @@
+import React from 'react';
+import { useDispatch } from "react-redux"; 
+import { signInUser } from '../../redux/actionCreators/authActionCreator';
+import { useNavigate } from 'react-router-dom';
+
+
+const LoginForm = () => {
+
+    const [email, setEmail] = React.useState("");
+    const [Password, setPassword] = React.useState("");
+    const [success, setSuccess] = React.useState(false);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleSumit = (e) => {
+        e.preventDefault();
+        if(!email || !Password) {
+            alert("please fill all fields")
+            return;
+        }
+    dispatch(signInUser(email,Password, setSuccess ));
+    }
+
+    React.useEffect(() =>{
+        if(success){
+            navigate("/dashboard")
+        }
+    },[success])
+
+
+    return (
+    <form autoComplete='off' onSubmit={handleSumit}>
+        <div className="form-group my-2">
+            <input type="email"
+            name='email'
+            className='form-control'
+            placeholder='Email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            />
+        </div>
+        <div className="form-group my-2">
+            <input type="password"
+            name='password'
+            className='form-control'
+            placeholder='Password'
+            value={Password}
+            onChange={(e) => setPassword(e.target.value)}
+            />
+        </div>
+        <button type='submit' className='btn btn-primary my-2 form-control'>Login</button>
+    </form>
+  )
+}
+
+export default LoginForm;
